@@ -1,5 +1,7 @@
 # Nanodata
- 
+
+This is web portal inspired by https://www.wikidata.org.
+
 ## Local setup
 
  1. Copy directory nanodata.confpath.template to nanodata.confpath
