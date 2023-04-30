@@ -115,7 +115,8 @@ public class ItemRepoImplSqlite implements ItemRepo {
                 rs.getString(ItemTable.URL),
                 rs.getString(ItemTable.ATTRIBUTES),
                 rs.getString(ItemTable.ALIASES),
-                rs.getInt(ItemTable.ENTRY_POINT_ITEM) != 0
+                rs.getInt(ItemTable.ENTRY_POINT_ITEM) != 0,
+                rs.getString(ItemTable.CREATED_AT)
         );
     }
 

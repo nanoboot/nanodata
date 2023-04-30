@@ -42,5 +42,6 @@ public class Item {
     private String attributes;
     private String aliases;
     private Boolean entryPointItem;
+    private String createdAt;
     
 }

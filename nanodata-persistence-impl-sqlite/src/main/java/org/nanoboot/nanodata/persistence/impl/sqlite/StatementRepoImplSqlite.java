@@ -46,7 +46,8 @@ public class StatementRepoImplSqlite implements StatementRepo {
                 rs.getString(StatementTable.ID),
                 rs.getString(StatementTable.VALUE),
                 rs.getString(StatementTable.SOURCE),
-                rs.getString(StatementTable.TARGET)
+                rs.getString(StatementTable.TARGET),
+                rs.getString(ItemTable.CREATED_AT)
         );
     }
 

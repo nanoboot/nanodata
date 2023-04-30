@@ -150,7 +150,8 @@
                 param_url,
                 param_attributes,
                 param_aliases,
-                param_entryPointItem == null ? false : param_entryPointItem.equals("1")
+                param_entryPointItem == null ? false : param_entryPointItem.equals("1"),
+                null
         );
 
         String idOfNewWebsite = itemRepo.create(newItem);

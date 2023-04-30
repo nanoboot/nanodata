@@ -155,6 +155,7 @@
         <tr><th>Attributes</th><td><pre><%=Utils.formatToHtml(item.getAttributes())%></pre></td></tr>
         <tr><th>Aliases</th><td><%=Utils.formatToHtml(item.getAliases())%></td></tr>
         <tr><th>Entry Point Item</th><td><%=Utils.formatToHtml(item.getEntryPointItem())%></td></tr>
+        <tr><th>Created at</th><td><%=item.getCreatedAt()%></a></td></tr>
 
 
     </table>

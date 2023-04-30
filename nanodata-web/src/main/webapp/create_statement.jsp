@@ -103,7 +103,8 @@
                 null,
                 param_value,
                 param_source,
-                param_target
+                param_target,
+                null
         );
 
         String idOfStatement = statementRepo.create(newStatement);

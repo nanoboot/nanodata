@@ -120,6 +120,7 @@ window.location.href = 'update_statement.jsp?id=<%=id%>'
         <tr><th>Source</th><td><a href="read_item.jsp?id=<%=statement.getSource()%>"><%=itemRepo.getLabel(statement.getSource())%></a></td></tr>
         <tr><th>Value</th><td><%=Utils.formatToHtml(statement.getValue())%></td></tr>
         <tr><th>Target</th><td><a href="read_item.jsp?id=<%=statement.getTarget()%>"><%=itemRepo.getLabel(statement.getTarget())%></a></td></tr>
+        <tr><th>Created at</th><td><%=statement.getCreatedAt()%></a></td></tr>
         
         
 

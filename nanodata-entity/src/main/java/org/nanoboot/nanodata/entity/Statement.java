@@ -38,4 +38,5 @@ public class Statement {
     private String value;
     private String source;
     private String target;
+    private String createdAt;
 }
