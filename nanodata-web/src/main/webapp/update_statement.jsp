@@ -139,7 +139,8 @@
                 id,
                 param_value,
                 param_source,
-                param_target
+                param_target,
+                null
         );
 
         statementRepo.update(updatedStatement);

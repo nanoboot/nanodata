@@ -186,7 +186,8 @@
                 param_url,
                 param_attributes,
                 param_aliases,
-                param_entryPointItem == null ? null : Boolean.valueOf(param_entryPointItem.equals("1"))
+                param_entryPointItem == null ? null : Boolean.valueOf(param_entryPointItem.equals("1")), 
+                null
         );
 
         itemRepo.update(updatedItem);

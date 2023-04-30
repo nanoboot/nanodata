@@ -128,6 +128,9 @@ public class ItemRepoImplSqlite implements ItemRepo {
         if(item.getDisambiguation() == null) {
             item.setDisambiguation("");
         }
+        if(item.getUrl() != null && item.getUrl().endsWith("/")) {
+            item.setUrl(item.getUrl().substring(0, item.getUrl().length() -1));
+        }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("INSERT INTO ")
@@ -230,6 +233,9 @@ public class ItemRepoImplSqlite implements ItemRepo {
             item.setDisambiguation("");
         }
         
+        if(item.getUrl() != null && item.getUrl().endsWith("/")) {
+            item.setUrl(item.getUrl().substring(0, item.getUrl().length() -1));
+        }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("UPDATE ")
