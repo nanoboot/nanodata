@@ -39,7 +39,6 @@
     <modules>
         <module>nanodata-entity</module>
         <module>nanodata-persistence-api</module>
-        <!--        <module>nanodata-persistence-impl-mock</module>-->
         <module>nanodata-persistence-impl-sqlite</module>
         <module>nanodata-web</module>
 

@@ -29,6 +29,7 @@ public class ItemTable {
     public static final String LABEL = "LABEL";
     public static final String DISAMBIGUATION = "DISAMBIGUATION";
     public static final String DESCRIPTION = "DESCRIPTION";
+    public static final String URL = "URL";
     public static final String ATTRIBUTES = "ATTRIBUTES";
     //
     public static final String ALIASES = "ALIASES";

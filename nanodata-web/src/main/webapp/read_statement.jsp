@@ -65,6 +65,7 @@
                     <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
 <% if(canUpdate) { %>
         <a href="update_statement.jsp?id=<%=id%>">Update</a>
+        <a href="delete_statement.jsp?id=<%=id%>">Delete</a>
 <% } %>
 
 
@@ -94,11 +95,13 @@
             background:#cccccc;
         }
     </style>
+    <!--
     <p class="margin_left_and_big_font">
-        <a href="read_item.jsp?id=<%=statement.getId()%>&previous_next=previous" class="button">Previous</a>
-        <a href="read_item.jsp?id=<%=statement.getId()%>&previous_next=next" class="button">Next</a>
+        <a href="read_statement.jsp?id=<%=statement.getId()%>&previous_next=previous" class="button">Previous</a>
+        <a href="read_statement.jsp?id=<%=statement.getId()%>&previous_next=next" class="button">Next</a>
         <br><br>
     </p>
+    -->
     
 <script>  
 function redirectToUpdate() {
@@ -114,9 +117,9 @@ window.location.href = 'update_statement.jsp?id=<%=id%>'
     <table ondblclick = "redirectToUpdate()">
         <tr>
             <th>ID</th><td><%=statement.getId()%></td></tr>
-        <tr><th>Source</th><td><a href="read_item?id=<%=statement.getSource()%>"><%=itemRepo.getLabel(statement.getSource())%></a></td></tr>
+        <tr><th>Source</th><td><a href="read_item.jsp?id=<%=statement.getSource()%>"><%=itemRepo.getLabel(statement.getSource())%></a></td></tr>
         <tr><th>Value</th><td><%=Utils.formatToHtml(statement.getValue())%></td></tr>
-        <tr><th>Target</th><td><a href="read_item?id=<%=statement.getTarget()%>"><%=itemRepo.getLabel(statement.getTarget())%></a></td></tr>
+        <tr><th>Target</th><td><a href="read_item.jsp?id=<%=statement.getTarget()%>"><%=itemRepo.getLabel(statement.getTarget())%></a></td></tr>
         
         
 

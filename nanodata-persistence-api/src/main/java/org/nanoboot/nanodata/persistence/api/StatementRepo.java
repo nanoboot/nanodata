@@ -27,13 +27,11 @@ import org.nanoboot.nanodata.entity.Statement;
  * @author robertvokac
  */
 public interface StatementRepo {
-    List<Statement> list(int pageNumber, int pageSize, String source, String target, String value);
+    List<Statement> list(int pageNumber, int pageSize, String source, String target, String value, String sourceId, String targetId);
         
-    int create(Statement statement);
+    String create(Statement statement);
     Statement read(String id);
     void update(Statement statement);
-    default void delete(Statement statement) {
-        throw new UnsupportedOperationException();
-    }
+    void delete(String id);
     
 }

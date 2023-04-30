@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Setter;
@@ -49,7 +50,7 @@ public class StatementRepoImplSqlite implements StatementRepo {
     }
 
     @Override
-    public List<Statement> list(int pageNumber, int pageSize, String source, String target, String value) {
+    public List<Statement> list(int pageNumber, int pageSize, String source, String target, String value, String sourceId, String targetId ) {
 
         List<Statement> result = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
@@ -65,7 +66,11 @@ public class StatementRepoImplSqlite implements StatementRepo {
         if (value != null && value.isEmpty()) {
             value = null;
         }
-        if (source != null || target != null || value != null) {
+
+        if (sourceId != null && sourceId.isEmpty()) {
+            sourceId = null;
+        }
+        if (source != null || target != null || value != null || sourceId != null || targetId != null) {
             sb.append(" WHERE 1=1");
         }
         if (source != null) {
@@ -105,6 +110,22 @@ public class StatementRepoImplSqlite implements StatementRepo {
                     .append(" LIKE '%' || ? || '%'  ");
 
         }
+
+        if (sourceId != null) {
+            sb
+                    .append(" AND ")
+                    .append(StatementTable.SOURCE)
+                    .append("=?");
+
+        }
+
+        if (targetId != null) {
+            sb
+                    .append(" AND ")
+                    .append(StatementTable.TARGET)
+                    .append("=?");
+
+        }
         {
             sb.append(" LIMIT ? OFFSET ? ");
         }
@@ -127,6 +148,12 @@ public class StatementRepoImplSqlite implements StatementRepo {
             if (value != null) {
                 stmt.setString(++i, value);
             }
+            if (sourceId != null) {
+                stmt.setString(++i, sourceId);
+            }
+            if (targetId != null) {
+                stmt.setString(++i, targetId);
+            }
             stmt.setInt(++i, pageSize);
             stmt.setInt(++i, (pageNumber - 1) * pageSize);
             System.err.println(stmt.toString());
@@ -137,6 +164,7 @@ public class StatementRepoImplSqlite implements StatementRepo {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(StatementRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -152,62 +180,57 @@ public class StatementRepoImplSqlite implements StatementRepo {
     }
 
     @Override
-    public int create(Statement statement) {
-//           if (item.getId() == null) {
-//            item.setId(UUID.randomUUID().toString());
-//        }
-//        StringBuilder sb = new StringBuilder();
-//        sb
-//                .append("INSERT INTO ")
-//                .append(ItemTable.TABLE_NAME)
-//                .append("(")
-//                .append(ItemTable.ID).append(",")
-//                //
-//                .append(ItemTable.LABEL).append(",")
-//                .append(ItemTable.DISAMBIGUATION).append(",")
-//                .append(ItemTable.DESCRIPTION).append(",")
-//                //
-//                .append(ItemTable.ATTRIBUTES).append(",")
-//                .append(ItemTable.ALIASES).append(",")
-//                .append(ItemTable.ENTRY_POINT_ITEM);
-//
-//        sb.append(")")
-//                .append(" VALUES (?, ?,?,?,  ?,?,?)");
-//
-//        String sql = sb.toString();
-//        System.err.println(sql);
-//        try (
-//                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
-//            int i = 0;
-//            stmt.setString(++i, item.getId());
-//            //
-//            stmt.setString(++i, item.getLabel());
-//            stmt.setString(++i, item.getDisambiguation());
-//            stmt.setString(++i, item.getDescription());
-//            //
-//            stmt.setString(++i, item.getAttributes());
-//            stmt.setString(++i, item.getAliases());
-//            stmt.setInt(++i, item.getEntryPointItem() ? 1 : 0);
-//
-//            //
-//            stmt.execute();
-//            System.out.println(stmt.toString());
-//
-//            return item.getId();
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(WebsiteRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        System.err.println("Error.");
-//        return "";
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String create(Statement statement) {
+        if (statement.getId() == null) {
+            statement.setId(UUID.randomUUID().toString());
+        }
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("INSERT INTO ")
+                .append(StatementTable.TABLE_NAME)
+                .append("(")
+                .append(StatementTable.ID).append(",")
+                //
+                .append(StatementTable.VALUE).append(",")
+                .append(StatementTable.SOURCE).append(",")
+                .append(StatementTable.TARGET);
+        //
+
+        sb.append(")")
+                .append(" VALUES (?, ?,?,?)");
+
+        String sql = sb.toString();
+        System.err.println(sql);
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+            int i = 0;
+            stmt.setString(++i, statement.getId());
+            //
+            stmt.setString(++i, statement.getValue());
+            stmt.setString(++i, statement.getSource());
+            stmt.setString(++i, statement.getTarget());
+            //
+
+            //
+            stmt.execute();
+            System.out.println(stmt.toString());
+
+            return statement.getId();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StatementRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.err.println("Error.");
+        return "";
+
     }
 
     @Override
     public void update(Statement statement) {
-         StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb
                 .append("UPDATE ")
                 .append(StatementTable.TABLE_NAME)
@@ -233,15 +256,16 @@ public class StatementRepoImplSqlite implements StatementRepo {
             System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(StatementRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         }
-   
+
     }
 
     @Override
     public Statement read(String id) {
-         if (id == null) {
+        if (id == null) {
             throw new RuntimeException("id is null");
         }
         StringBuilder sb = new StringBuilder();
@@ -267,6 +291,7 @@ public class StatementRepoImplSqlite implements StatementRepo {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(StatementRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -279,7 +304,39 @@ public class StatementRepoImplSqlite implements StatementRepo {
             }
         }
         return null;
+
+    }
+
+    @Override
+    public void delete(String id) {
+
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append("DELETE FROM ")
+                .append(StatementTable.TABLE_NAME);
+        sb.append(" WHERE ");
+
+        sb.append(StatementTable.ID);
+        sb.append("=?");
+        String sql = sb.toString();
+        System.err.println("SQL::" + sql);
+        int i = 0;
         
+        try (
+                Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
+
+            stmt.setString(++i, id);
+           
+            System.err.println(stmt.toString());
+            stmt.execute();
+
+           
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StatementRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

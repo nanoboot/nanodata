@@ -59,8 +59,8 @@
     <span class="nav"><a href="index.jsp">Home</a>
         >> <a href="statements.jsp">Statements</a>
         >> <a href="read_statement.jsp?id=<%=id%>">Read</a>
-        <a href="update_statement.jsp?id=<%=id%>" class="nav_a_current">Update</a>
-        <a href="delete_statement.jsp?id=<%=id%>">Delete</a>
+        <a href="update_statement.jsp?id=<%=id%>">Update</a>
+        <a href="delete_statement.jsp?id=<%=id%>" class="nav_a_current">Delete</a>
 
 
     </span>
@@ -82,83 +82,49 @@
     <%
             throw new jakarta.servlet.jsp.SkipPageException();
         }
-        String param_value = request.getParameter("value");
-        boolean formToBeProcessed = param_value != null && !param_value.isEmpty();
+        String param_user_agree_to_delete_this_statement = request.getParameter("user_agree_to_delete_this_statement");
+        boolean formToBeProcessed = param_user_agree_to_delete_this_statement != null && !param_user_agree_to_delete_this_statement.isEmpty();
     %>
 
-    
+
     <% if (!formToBeProcessed) {%>
-    <form action="update_statement.jsp" method="get">
-        <table>
-            <tr>
-                <td><label for="id">ID <b style="color:red;font-size:130%;">*</b>:</label></td>
-                <td><input type="text" name="id" value="<%=id%>" readonly style="background:#dddddd;"></td>
-            </tr>
-            <tr>
-                <td><label for="source">Source <b style="color:red;font-size:130%;">*</b>:</label></td>
-                <td><input type="text" name="source" value="<%=statement.getSource()%>"></td>
-            </tr>
-            <tr>
-                <td><label for="value">Value</label></td>
-                <td><input type="text" name="value" value="<%=statement.getValue() == null ? "" : statement.getValue()%>"></td>
-            </tr>
-            <tr>
-                <td><label for="target">Target</label></td>
-                <td><input type="text" name="target" value="<%=statement.getTarget() == null ? "" : statement.getTarget()%>"></td>
-            </tr>
-           
+    <form action="delete_statement.jsp" method="get">
+        <input type="hidden" name="id" value="<%=id%>" readonly></td>
 
-           
+        <input type="hidden" name="user_agree_to_delete_this_statement" value="yes">
 
-
-            <tr>
-                <td><a href="statements.jsp" style="font-size:130%;background:#dddddd;border:2px solid #bbbbbb;padding:2px;text-decoration:none;">Cancel</a></td>
-                <td style="text-align:right;"><input type="submit" value="Update"></td>
-            </tr>
-        </table>
-        <b style="color:red;font-size:200%;margin-left:20px;">*</b> ...mandatory
-
-
-        
-
-    
-    </form>
-
-    <% } else { %>
-
-    
-    
-    <%
-        String param_source = request.getParameter("source");
-
-        String param_target = request.getParameter("target");
-       
-        //
-        //
-        Statement updatedStatement = new Statement(
-                id,
-                param_value,
-                param_source,
-                param_target
-        );
-
-        statementRepo.update(updatedStatement);
-
-
-    %>
-
-
-    <script>
-        function redirectToRead() {
-            window.location.href = 'read_statement.jsp?id=<%=id%>'
-        }
-        redirectToRead();
-    </script>
+        <a href="statements.jsp" style="font-size:130%;background:#dddddd;border:2px solid #bbbbbb;padding:2px;text-decoration:none;">Cancel</a></td>
+    <input type="submit" value="Delete forever">
 
 
 
-    <% }%>
 
-    <div id="footer">Content available under a <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" title="Content available under a Creative Commons Attribution-ShareAlike 4.0 International License.">Creative Commons Attribution-ShareAlike 4.0 International License</a> <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" title="Content available under a Creative Commons Attribution-ShareAlike 4.0 International License."><img alt="Content available under a Creative Commons Attribution-ShareAlike 4.0 International License." style="border-width:0" src="images/creative_commons_attribution_share_alike_4.0_international_licence_88x31.png" /></a></div>
+
+
+</form>
+
+<% } else { %>
+
+
+
+<%
+  
+    statementRepo.delete(id);
+
+%>
+
+
+<script>
+    function redirectToList() {
+        window.location.href = 'statements.jsp?id=<%=id%>'
+    }
+    redirectToList();
+</script>
+
+
+
+<% }%>
+
+<div id="footer">Content available under a <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" title="Content available under a Creative Commons Attribution-ShareAlike 4.0 International License.">Creative Commons Attribution-ShareAlike 4.0 International License</a> <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" title="Content available under a Creative Commons Attribution-ShareAlike 4.0 International License."><img alt="Content available under a Creative Commons Attribution-ShareAlike 4.0 International License." style="border-width:0" src="images/creative_commons_attribution_share_alike_4.0_international_licence_88x31.png" /></a></div>
 </body>
 </html>

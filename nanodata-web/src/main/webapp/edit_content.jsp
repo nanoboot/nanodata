@@ -30,8 +30,6 @@
     <%@page import="java.util.Scanner"%>
     <%@page import="java.io.File"%>
     <%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
-    <%@page import="org.nanoboot.nanodata.persistence.api.WebsiteRepo"%>
-    <%@page import="org.nanoboot.nanodata.entity.Website"%>
     <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
     <%@page import="org.springframework.context.ApplicationContext"%>
 

@@ -38,6 +38,7 @@ public class Item {
     private String label;
     private String disambiguation;
     private String description;
+    private String url;
     private String attributes;
     private String aliases;
     private Boolean entryPointItem;

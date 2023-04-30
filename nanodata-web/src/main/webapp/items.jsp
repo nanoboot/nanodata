@@ -1,3 +1,4 @@
+<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
 <%@page import="java.util.List"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
 <%@page import="org.nanoboot.nanodata.entity.Item"%>
@@ -75,6 +76,7 @@
         String label = request.getParameter("label");
         String disambiguation = request.getParameter("disambiguation");
         String description = request.getParameter("description");
+        String url = request.getParameter("url");
         String aliases = request.getParameter("aliases");
         String entryPointItem = request.getParameter("entryPointItem");
 
@@ -100,6 +102,7 @@
         <label for="label">Label</label><input type="text" name="label" value="<%=label != null ? label : ""%>" style="margin-right:10px;max-width:100px;">
         <label for="disambiguation">Disambiguation</label><input type="text" name="disambiguation" <%=disambiguation != null ? disambiguation : ""%> style="max-width:100px;">
         <label for="description">Description</label><input type="text" name="description" <%=description != null ? description : ""%>  style="max-width:100px;">
+        <!--<label for="url">Url</label><input type="text" name="description" <%=url != null ? url : ""%>  style="max-width:100px;">-->
         <label for="aliases">Aliases</label><input type="text" name="aliases"  <%=aliases != null ? aliases : ""%> style="max-width:100px;">
         <label for="entryPointItem">Entry Point Item</label><input type="checkbox" name="entryPointItem"  <%=entryPointItem != null && entryPointItem.equals("1") ? "checked " : ""%>value="1">
 
@@ -138,6 +141,7 @@
                 <th>Label</th>
                 <th>Disambiguation</th>
                 <th>Description</th>
+                <th>Url</th>
                 <th>Aliases</th>
                 <th>Entry Point Item</th>
             </tr>
@@ -184,6 +188,7 @@
             
             <td><%=i.getDisambiguation() == null ? EMPTY : i.getDisambiguation()%></td>
             <td><%=i.getDescription() == null ? EMPTY : i.getDescription()%></td>
+            <td><%=i.getUrl() == null ? EMPTY : Utils.formatToHtml(i.getUrl())%></td>
             <td><%=i.getAliases() == null ? EMPTY : i.getAliases()%></td>
             <td><%=org.nanoboot.nanodata.web.misc.utils.Utils.formatToHtml(i.getEntryPointItem())%></td>
 

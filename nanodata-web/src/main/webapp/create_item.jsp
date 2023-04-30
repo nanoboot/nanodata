@@ -36,8 +36,8 @@
         <a href="index.jsp" id="main_title">Nanodata</a></span>
 
     <span class="nav"><a href="index.jsp">Home</a>
-        >> <a href="websites.jsp">Items</a>
-        >> <a href="create_website.jsp" class="nav_a_current">Add Item</a></span>
+        >> <a href="items.jsp">Items</a>
+        >> <a href="create_item.jsp" class="nav_a_current">Add Item</a></span>
         
     <%
         if (org.nanoboot.nanodata.web.misc.utils.Utils.cannotUpdate(request)) {
@@ -76,6 +76,10 @@
                 <td style="text-align:left;"><input type="text" name="description" value="" ></td>
             </tr>
             <tr>
+                <td><label for="url">Url</label></td>
+                <td style="text-align:left;"><input type="text" name="url" value="" ></td>
+            </tr>
+            <tr>
                 <td><label for="attributes">Attributes:</label></td>
                 <td style="text-align:left;">
                     <input type="text" name="attributes" >
@@ -110,6 +114,7 @@
         
      String param_disambiguation = request.getParameter("disambiguation");
      String param_description = request.getParameter("description");
+     String param_url = request.getParameter("url");
      String param_attributes = request.getParameter("attributes");
      String param_aliases = request.getParameter("aliases");
      String param_entryPointItem = request.getParameter("entryPointItem");
@@ -121,6 +126,10 @@
         }
         if (param_description != null && param_description.isEmpty()) {
             param_description = null;
+        }
+        
+        if (param_url != null && param_url.isEmpty()) {
+            param_url = null;
         }
         if (param_attributes != null && param_attributes.isEmpty()) {
             param_attributes = null;
@@ -138,6 +147,7 @@
                 param_label,
                 param_disambiguation,
                 param_description,
+                param_url,
                 param_attributes,
                 param_aliases,
                 param_entryPointItem == null ? false : param_entryPointItem.equals("1")

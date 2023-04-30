@@ -51,18 +51,26 @@ public class Utils {
             Boolean b = (Boolean) o;
             return b.booleanValue() ? "<span style=\"color:#00CC00;font-weight:bold;\">YES</span>" : "<span style=\"color:red;font-weight:bold;\">NO</span>";
         }
+        if (o instanceof String) {
+            String s = (String) o;
+            if(s.startsWith("http")) {
+                return "<a href=\"" + s + "\" target=\"_blank\">" + s + "</a>";
+            } else {
+                return s;
+            }
+        }
         return o.toString();
     }
-
 
     public static boolean cannotUpdate(HttpServletRequest request) {
         return !canUpdate(request);
     }
+
     public static boolean canUpdate(HttpServletRequest request) {
         //if(true)return true;
 
         String allcanupdate = System.getProperty("nanodata.allcanupdate");
-        if(allcanupdate != null && allcanupdate.equals("true")) {
+        if (allcanupdate != null && allcanupdate.equals("true")) {
             return true;
         }
         HttpSession session = request.getSession(false);

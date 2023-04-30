@@ -116,7 +116,9 @@
                 10,
                 source, 
                 target, 
-                value
+                value,
+                null,
+                null
         );
 
         if (statements.isEmpty()) {
@@ -132,7 +134,7 @@
             <tr>
                 <!--<th title="ID">ID</th>-->
 
-                <th style="width:130px;"></th>
+                <th style="width:170px;"></th>
                 <th>Source</th>
                 <th>Value</th>
                 <th>Target</th>
@@ -173,7 +175,11 @@
                 
     <!--<a href="read_item.jsp?id=<%=i.getId()%>"><img src="images/read.png" title="View" width="48" height="48" /></a>-->
     <!--<% if(canUpdate) { %><a href="update_item.jsp?id=<%=i.getId()%>"><img src="images/update.png" title="Update" width="48" height="48" /></a><%}%>-->
-                <% if(canUpdate) { %><a href="update_statement.jsp?id=<%=i.getId()%>">Update</a><%}%>
+                <% if(canUpdate) { %>
+                <a href="update_statement.jsp?id=<%=i.getId()%>">Update</a> 
+                <a href="delete_statement.jsp?id=<%=i.getId()%>" target="_blank">Delete</a>
+                
+                <%}%>
             </td>
             <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
             <td><%=i.getValue()%></td>

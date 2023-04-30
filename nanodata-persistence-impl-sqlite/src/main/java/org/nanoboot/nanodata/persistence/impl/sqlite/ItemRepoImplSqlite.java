@@ -90,6 +90,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -110,6 +111,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
                 rs.getString(ItemTable.LABEL),
                 rs.getString(ItemTable.DISAMBIGUATION),
                 rs.getString(ItemTable.DESCRIPTION),
+                rs.getString(ItemTable.URL),
                 rs.getString(ItemTable.ATTRIBUTES),
                 rs.getString(ItemTable.ALIASES),
                 rs.getInt(ItemTable.ENTRY_POINT_ITEM) != 0
@@ -121,6 +123,9 @@ public class ItemRepoImplSqlite implements ItemRepo {
         if (item.getId() == null) {
             item.setId(UUID.randomUUID().toString());
         }
+        if(item.getDisambiguation() == null) {
+            item.setDisambiguation("");
+        }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("INSERT INTO ")
@@ -131,13 +136,14 @@ public class ItemRepoImplSqlite implements ItemRepo {
                 .append(ItemTable.LABEL).append(",")
                 .append(ItemTable.DISAMBIGUATION).append(",")
                 .append(ItemTable.DESCRIPTION).append(",")
+                .append(ItemTable.URL).append(",")
                 //
                 .append(ItemTable.ATTRIBUTES).append(",")
                 .append(ItemTable.ALIASES).append(",")
                 .append(ItemTable.ENTRY_POINT_ITEM);
 
         sb.append(")")
-                .append(" VALUES (?, ?,?,?,  ?,?,?)");
+                .append(" VALUES (?, ?,?,?, ?, ?,?,?)");
 
         String sql = sb.toString();
         System.err.println(sql);
@@ -149,6 +155,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             stmt.setString(++i, item.getLabel());
             stmt.setString(++i, item.getDisambiguation());
             stmt.setString(++i, item.getDescription());
+            stmt.setString(++i, item.getUrl());
             //
             stmt.setString(++i, item.getAttributes());
             stmt.setString(++i, item.getAliases());
@@ -162,6 +169,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -197,6 +205,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -213,6 +222,10 @@ public class ItemRepoImplSqlite implements ItemRepo {
 
     @Override
     public void update(Item item) {
+        if(item.getDisambiguation() == null) {
+            item.setDisambiguation("");
+        }
+        
         StringBuilder sb = new StringBuilder();
         sb
                 .append("UPDATE ")
@@ -221,6 +234,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
                 .append(ItemTable.LABEL).append("=?, ")
                 .append(ItemTable.DISAMBIGUATION).append("=?, ")
                 .append(ItemTable.DESCRIPTION).append("=?, ")
+                .append(ItemTable.URL).append("=?, ")
                 //
                 .append(ItemTable.ATTRIBUTES).append("=?, ")
                 .append(ItemTable.ALIASES).append("=?, ")
@@ -235,6 +249,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             stmt.setString(++i, item.getLabel());
             stmt.setString(++i, item.getDisambiguation());
             stmt.setString(++i, item.getDescription());
+            stmt.setString(++i, item.getUrl());
             //
             stmt.setString(++i, item.getAttributes());
             stmt.setString(++i, item.getAliases());
@@ -246,6 +261,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -281,6 +297,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
