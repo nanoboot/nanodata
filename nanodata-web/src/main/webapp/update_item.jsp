@@ -113,7 +113,7 @@
             </tr>
             <tr>
                 <td><label for="attributes">Attributes:</label></td>
-                <td><input type="text" name="attributes" value="<%=item.getAttributes() == null ? "" : item.getAttributes()%>"></td>
+                <td><textarea style="width:100%;height:100px;" name="attributes"><%=item.getAttributes() == null ? "" : item.getAttributes()%></textarea></td>
             </tr>
             <tr>
                 <td><label for="aliases">Aliases:</label></td>

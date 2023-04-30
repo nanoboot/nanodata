@@ -82,7 +82,7 @@
             <tr>
                 <td><label for="attributes">Attributes:</label></td>
                 <td style="text-align:left;">
-                    <input type="text" name="attributes" >
+                    <textarea style="width:100%;height:100px;" name="attributes"></textarea>
                 </td>
             </tr>
             <tr>

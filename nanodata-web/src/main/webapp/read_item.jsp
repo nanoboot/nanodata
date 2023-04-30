@@ -152,7 +152,7 @@
         <tr><th>Disambiguation</th><td><%=Utils.formatToHtml(item.getDisambiguation())%></td></tr>
         <tr><th>Description</th><td><%=Utils.formatToHtml(item.getDescription())%></td></tr>
         <tr><th>Url</th><td><%=Utils.formatToHtml(item.getUrl())%></td></tr>
-        <tr><th>Attributes</th><td><%=Utils.formatToHtml(item.getAttributes())%></td></tr>
+        <tr><th>Attributes</th><td><pre><%=Utils.formatToHtml(item.getAttributes())%></pre></td></tr>
         <tr><th>Aliases</th><td><%=Utils.formatToHtml(item.getAliases())%></td></tr>
         <tr><th>Entry Point Item</th><td><%=Utils.formatToHtml(item.getEntryPointItem())%></td></tr>
 
