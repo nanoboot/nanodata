@@ -29,6 +29,8 @@ public class StatementTable {
     public static final String VALUE = "VALUE";
     public static final String SOURCE = "SOURCE";
     public static final String TARGET = "TARGET";
+    public static final String CREATED_AT = "CREATED_AT";
+    
     
     private StatementTable() {
         //Not meant to be instantiated.

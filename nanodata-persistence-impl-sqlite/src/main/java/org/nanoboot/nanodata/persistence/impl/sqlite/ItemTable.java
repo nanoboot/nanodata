@@ -34,6 +34,7 @@ public class ItemTable {
     //
     public static final String ALIASES = "ALIASES";
     public static final String ENTRY_POINT_ITEM = "ENTRY_POINT_ITEM";
+    public static final String CREATED_AT = "CREATED_AT";
     
     
     private ItemTable() {

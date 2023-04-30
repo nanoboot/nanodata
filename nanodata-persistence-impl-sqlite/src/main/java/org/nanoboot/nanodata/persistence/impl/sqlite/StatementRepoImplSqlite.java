@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import lombok.Setter;
 import org.nanoboot.nanodata.entity.Statement;
 import org.nanoboot.nanodata.persistence.api.StatementRepo;
+import org.nanoboot.powerframework.time.moment.UniversalDateTime;
 
 /**
  *
@@ -193,11 +194,12 @@ public class StatementRepoImplSqlite implements StatementRepo {
                 //
                 .append(StatementTable.VALUE).append(",")
                 .append(StatementTable.SOURCE).append(",")
-                .append(StatementTable.TARGET);
+                .append(StatementTable.TARGET).append(",")
+                .append(StatementTable.CREATED_AT);
         //
 
         sb.append(")")
-                .append(" VALUES (?, ?,?,?)");
+                .append(" VALUES (?, ?,?,?,?)");
 
         String sql = sb.toString();
         System.err.println(sql);
@@ -209,6 +211,7 @@ public class StatementRepoImplSqlite implements StatementRepo {
             stmt.setString(++i, statement.getValue());
             stmt.setString(++i, statement.getSource());
             stmt.setString(++i, statement.getTarget());
+            stmt.setString(++i, UniversalDateTime.now().toString());
             //
 
             //

@@ -32,6 +32,7 @@ import org.nanoboot.nanodata.entity.Item;
 import org.nanoboot.nanodata.persistence.api.ItemRepo;
 import org.nanoboot.nanodata.persistence.api.TextPosition;
 import static org.nanoboot.nanodata.persistence.api.TextPosition.LEFT;
+import org.nanoboot.powerframework.time.moment.UniversalDateTime;
 
 /**
  *
@@ -140,10 +141,11 @@ public class ItemRepoImplSqlite implements ItemRepo {
                 //
                 .append(ItemTable.ATTRIBUTES).append(",")
                 .append(ItemTable.ALIASES).append(",")
-                .append(ItemTable.ENTRY_POINT_ITEM);
+                .append(ItemTable.ENTRY_POINT_ITEM).append(",")
+                .append(ItemTable.CREATED_AT);
 
         sb.append(")")
-                .append(" VALUES (?, ?,?,?, ?, ?,?,?)");
+                .append(" VALUES (?, ?,?,?, ?, ?,?,?,?)");
 
         String sql = sb.toString();
         System.err.println(sql);
@@ -160,6 +162,7 @@ public class ItemRepoImplSqlite implements ItemRepo {
             stmt.setString(++i, item.getAttributes());
             stmt.setString(++i, item.getAliases());
             stmt.setInt(++i, item.getEntryPointItem() ? 1 : 0);
+            stmt.setString(++i, UniversalDateTime.now().toString());
 
             //
             stmt.execute();
