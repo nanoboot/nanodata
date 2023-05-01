@@ -82,7 +82,7 @@
             String submit_button_cancel = request.getParameter("submit_button_cancel");
 
             if (submit_button_cancel != null) {%><script>function redirectToShow() {
-                    window.location.href = 'show_content.jsp?id=<%=id%>'
+                    window.location.href = 'read_item.jsp?id=<%=id%>'
                 }
                 redirectToShow();</script><% }
             %>
