@@ -195,6 +195,7 @@
                 <th>Source</th>
                 <th>Value</th>
                 <th>Target</th>
+                <th>Flags</th>
             </tr>
         </thead>
 
@@ -240,6 +241,7 @@
             <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
             <td><%=i.getValue()%></td>
             <td><a href="read_item.jsp?id=<%=i.getTarget()%>"><%=itemRepo.getLabel(i.getTarget())%></a></td>
+            <td><%=Utils.formatToHtml(i.getFlags())%></td>
 
 
         </tr>
@@ -282,6 +284,7 @@
             <th>Source</th>
             <th>Value</th>
             <th>Target</th>
+            <th>Flags</th>
         </tr>
     </thead>
 
@@ -327,6 +330,7 @@
         <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
         <td><%=i.getValue()%></td>
         <td><a href="read_item.jsp?id=<%=i.getTarget()%>"><%=itemRepo.getLabel(i.getTarget())%></a></td>
+        <td><%=Utils.formatToHtml(i.getFlags())%></td>
 
 
     </tr>

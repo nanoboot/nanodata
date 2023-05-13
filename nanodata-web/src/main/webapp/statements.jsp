@@ -4,6 +4,7 @@
 <%@page import="org.nanoboot.nanodata.entity.Statement"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
+<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
 <!DOCTYPE>
 <%@ page session="false" %>
 
@@ -77,6 +78,7 @@
         String value = request.getParameter("value");
         String source = request.getParameter("source");
         String target = request.getParameter("target");
+        String flags = request.getParameter("flags");
 
         String pageNumber = request.getParameter("pageNumber");
         String previousNextPage = request.getParameter("PreviousNextPage");
@@ -100,6 +102,7 @@
         <label for="value">Value</label><input type="text" name="value" value="<%=value != null ? value : ""%>" style="margin-right:10px;max-width:100px;">
         <label for="source">Source</label><input type="text" name="source" value="<%=source != null ? source : ""%>" style="max-width:100px;">
         <label for="target">Target</label><input type="text" name="target" value="<%=target!= null ? target : ""%>" style="max-width:100px;">
+        <label for="target">Flags</label><input type="text" name="target" value="<%=flags!= null ? flags : ""%>" style="max-width:100px;">
 
 
         <input type="submit" value="Filter" style="margin-left:20px;height:40px;">
@@ -138,6 +141,7 @@
                 <th>Source</th>
                 <th>Value</th>
                 <th>Target</th>
+                <th>Flags</th>
             </tr>
         </thead>
 
@@ -184,6 +188,7 @@
             <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
             <td><%=i.getValue()%></td>
                 <td><a href="read_item.jsp?id=<%=i.getTarget()%>"><%=itemRepo.getLabel(i.getTarget())%></a></td>
+                <td><%=Utils.formatToHtml(i.getFlags())%></td>
 
 
         </tr>

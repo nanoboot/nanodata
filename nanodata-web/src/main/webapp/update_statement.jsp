@@ -107,6 +107,11 @@
                 <td><input type="text" name="target" value="<%=statement.getTarget() == null ? "" : statement.getTarget()%>"></td>
             </tr>
            
+            <tr>
+                <td><label for="flags">Flags</label></td>
+                <td><input type="text" name="flags" value="<%=statement.getFlags() == null ? "" : statement.getFlags()%>"></td>
+            </tr>
+           
 
            
 
@@ -132,6 +137,7 @@
         String param_source = request.getParameter("source");
 
         String param_target = request.getParameter("target");
+        String param_flags = request.getParameter("flags");
        
         //
         //
@@ -140,7 +146,8 @@
                 param_value,
                 param_source,
                 param_target,
-                null
+                null,
+                param_flags
         );
 
         statementRepo.update(updatedStatement);

@@ -47,12 +47,13 @@ public class StatementRepoImplSqlite implements StatementRepo {
                 rs.getString(StatementTable.VALUE),
                 rs.getString(StatementTable.SOURCE),
                 rs.getString(StatementTable.TARGET),
-                rs.getString(ItemTable.CREATED_AT)
-        );
+                rs.getString(StatementTable.CREATED_AT),
+                rs.getString(StatementTable.FLAGS)
+                );
     }
 
     @Override
-    public List<Statement> list(int pageNumber, int pageSize, String source, String target, String value, String sourceId, String targetId ) {
+    public List<Statement> list(int pageNumber, int pageSize, String source, String target, String value, String sourceId, String targetId) {
 
         List<Statement> result = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
@@ -196,11 +197,12 @@ public class StatementRepoImplSqlite implements StatementRepo {
                 .append(StatementTable.VALUE).append(",")
                 .append(StatementTable.SOURCE).append(",")
                 .append(StatementTable.TARGET).append(",")
-                .append(StatementTable.CREATED_AT);
+                .append(StatementTable.CREATED_AT).append(",")
+                .append(StatementTable.FLAGS);
         //
 
         sb.append(")")
-                .append(" VALUES (?, ?,?,?,?)");
+                .append(" VALUES (?, ?,?,?,?,?)");
 
         String sql = sb.toString();
         System.err.println(sql);
@@ -213,6 +215,7 @@ public class StatementRepoImplSqlite implements StatementRepo {
             stmt.setString(++i, statement.getSource());
             stmt.setString(++i, statement.getTarget());
             stmt.setString(++i, UniversalDateTime.now().toString());
+            stmt.setString(++i, statement.getFlags());
             //
 
             //
@@ -241,7 +244,8 @@ public class StatementRepoImplSqlite implements StatementRepo {
                 .append(" SET ")
                 .append(StatementTable.SOURCE).append("=?, ")
                 .append(StatementTable.TARGET).append("=?, ")
-                .append(StatementTable.VALUE).append("=? ")
+                .append(StatementTable.VALUE).append("=?, ")
+                .append(StatementTable.FLAGS).append("=? ")
                 //
                 .append(" WHERE ").append(StatementTable.ID).append("=?");
 
@@ -253,6 +257,7 @@ public class StatementRepoImplSqlite implements StatementRepo {
             stmt.setString(++i, statement.getSource());
             stmt.setString(++i, statement.getTarget());
             stmt.setString(++i, statement.getValue());
+            stmt.setString(++i, statement.getFlags());
             //
             stmt.setString(++i, statement.getId());
 
@@ -325,16 +330,15 @@ public class StatementRepoImplSqlite implements StatementRepo {
         String sql = sb.toString();
         System.err.println("SQL::" + sql);
         int i = 0;
-        
+
         try (
                 Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
 
             stmt.setString(++i, id);
-           
+
             System.err.println(stmt.toString());
             stmt.execute();
 
-           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);

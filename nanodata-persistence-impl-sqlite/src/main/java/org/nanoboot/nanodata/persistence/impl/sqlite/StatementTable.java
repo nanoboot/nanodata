@@ -30,6 +30,7 @@ public class StatementTable {
     public static final String SOURCE = "SOURCE";
     public static final String TARGET = "TARGET";
     public static final String CREATED_AT = "CREATED_AT";
+    public static final String FLAGS = "FLAGS";
     
     
     private StatementTable() {

@@ -77,6 +77,12 @@
                 <td style="text-align:left;"><input type="text" name="target" value="" ></td>
             </tr>
            
+            <tr>
+                <td><label for="target">Flags<b style="color:red;font-size:130%;">*</b></label></td>
+                <td style="text-align:left;"><input type="text" name="flags" value="" ></td>
+            </tr>
+           
+         
          
             <tr>
                 <td><a href="statements.jsp" style="font-size:130%;background:#dddddd;border:2px solid #bbbbbb;padding:2px;text-decoration:none;">Cancel</a></td>
@@ -97,6 +103,7 @@
         
      String param_source = request.getParameter("source");
      String param_target = request.getParameter("target");
+     String param_flags = request.getParameter("flags");
 
         //
         Statement newStatement = new Statement(
@@ -104,7 +111,8 @@
                 param_value,
                 param_source,
                 param_target,
-                null
+                null,
+                param_flags
         );
 
         String idOfStatement = statementRepo.create(newStatement);

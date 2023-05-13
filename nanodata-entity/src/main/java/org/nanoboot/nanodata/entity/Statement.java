@@ -39,4 +39,5 @@ public class Statement {
     private String source;
     private String target;
     private String createdAt;
+    private String flags;
 }
