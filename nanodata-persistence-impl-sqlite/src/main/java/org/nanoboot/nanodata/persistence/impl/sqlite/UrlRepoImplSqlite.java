@@ -28,32 +28,35 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Setter;
-import org.nanoboot.nanodata.entity.Item;
-import org.nanoboot.nanodata.persistence.api.ItemRepo;
+import org.nanoboot.nanodata.entity.Url;
+import org.nanoboot.nanodata.persistence.api.UrlRepo;
 import org.nanoboot.nanodata.persistence.api.TextPosition;
+import static org.nanoboot.nanodata.persistence.api.TextPosition.DOES_NOT_MATTER;
 import static org.nanoboot.nanodata.persistence.api.TextPosition.LEFT;
+import static org.nanoboot.nanodata.persistence.api.TextPosition.RIGHT;
 import org.nanoboot.powerframework.time.moment.UniversalDateTime;
 
 /**
  *
  * @author robertvokac
  */
-public class ItemRepoImplSqlite implements ItemRepo {
+public class UrlRepoImplSqlite implements UrlRepo {
 
     @Setter
     private SqliteConnectionFactory sqliteConnectionFactory;
 
     @Override
-    public List<Item> list(int pageNumber, int pageSize, String labelLike, TextPosition textPosition) {
+    public List<Url> list(int pageNumber, int pageSize, String urlLike, TextPosition textPosition, String itemId) {
 
-        List<Item> result = new ArrayList<>();
+        List<Url> result = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         sb
                 .append("SELECT * FROM ")
-                .append(ItemTable.TABLE_NAME);
+                .append(UrlTable.TABLE_NAME);
 
-        if (labelLike != null) {
-            sb.append(" WHERE ").append(ItemTable.LABEL);
+        sb.append(" WHERE 1=1");
+        if (urlLike != null) {
+            sb.append(" AND ").append(UrlTable.NAME);
             switch (textPosition) {
                 case LEFT:
                     sb.append(" LIKE ? || '%'");
@@ -68,6 +71,10 @@ public class ItemRepoImplSqlite implements ItemRepo {
                     throw new RuntimeException("Unsupported TextPosition: " + textPosition);
             }
         }
+        if (itemId != null) {
+            sb.append(" AND ").append(UrlTable.ITEM_ID).append("=? ");
+
+        }
         {
             sb.append(" LIMIT ? OFFSET ? ");
         }
@@ -78,8 +85,12 @@ public class ItemRepoImplSqlite implements ItemRepo {
         try (
                 Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
 
-            if (labelLike != null) {
-                stmt.setString(++i, labelLike);
+            if (urlLike != null) {
+                stmt.setString(++i, urlLike);
+            }
+            if (itemId != null) {
+                stmt.setString(++i, itemId);
+
             }
             stmt.setInt(++i, pageSize);
             stmt.setInt(++i, (pageNumber - 1) * pageSize);
@@ -87,108 +98,110 @@ public class ItemRepoImplSqlite implements ItemRepo {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                result.add(extractItemFromResultSet(rs));
+                result.add(extractUrlFromResultSet(rs));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UrlRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (rs != null) {
                     rs.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UrlRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return result;
     }
 
-    private static Item extractItemFromResultSet(final ResultSet rs) throws SQLException {
-        return new Item(
-                rs.getString(ItemTable.ID),
-                rs.getString(ItemTable.LABEL),
-                rs.getString(ItemTable.DISAMBIGUATION),
-                rs.getString(ItemTable.DESCRIPTION),
-                rs.getString(ItemTable.ATTRIBUTES),
-                rs.getString(ItemTable.ALIASES),
-                rs.getInt(ItemTable.ENTRY_POINT_ITEM) != 0,
-                rs.getString(ItemTable.CREATED_AT)
+    private static Url extractUrlFromResultSet(final ResultSet rs) throws SQLException {
+        return new Url(
+                rs.getString(UrlTable.ID),
+                rs.getString(UrlTable.URL),
+                rs.getString(UrlTable.NAME),
+                rs.getString(UrlTable.ITEM_ID),
+                rs.getInt(UrlTable.OFFICIAL) != 0,
+                rs.getString(UrlTable.CREATED_AT)
         );
     }
 
     @Override
-    public String create(Item item) {
-        if (item.getId() == null) {
-            item.setId(UUID.randomUUID().toString());
+    public String create(Url url) {
+        if (url.getId() == null) {
+            url.setId(UUID.randomUUID().toString());
         }
-        if(item.getDisambiguation() == null) {
-            item.setDisambiguation("");
+        if (url.getOfficial() == null) {
+            url.setOfficial(false);
+        }
+        if (url.getName() == null) {
+            url.setName("");
+        }
+        
+        if (url.getUrl() != null) {
+            url.setUrl(url.getUrl().trim());
+        }
+        if (url.getUrl() != null && url.getUrl().endsWith("/")) {
+            url.setUrl(url.getUrl().substring(0, url.getUrl().length() - 1));
         }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("INSERT INTO ")
-                .append(ItemTable.TABLE_NAME)
+                .append(UrlTable.TABLE_NAME)
                 .append("(")
-                .append(ItemTable.ID).append(",")
+                .append(UrlTable.ID).append(",")
                 //
-                .append(ItemTable.LABEL).append(",")
-                .append(ItemTable.DISAMBIGUATION).append(",")
-                .append(ItemTable.DESCRIPTION).append(",")
-                //
-                .append(ItemTable.ATTRIBUTES).append(",")
-                .append(ItemTable.ALIASES).append(",")
-                .append(ItemTable.ENTRY_POINT_ITEM).append(",")
-                .append(ItemTable.CREATED_AT);
+                .append(UrlTable.URL).append(",")
+                .append(UrlTable.NAME).append(",")
+                .append(UrlTable.ITEM_ID).append(",")
+                .append(UrlTable.OFFICIAL).append(",")
+                .append(UrlTable.CREATED_AT);
 
         sb.append(")")
-                .append(" VALUES (?, ?,?, ?, ?,?,?,?)");
+                .append(" VALUES (?,?,?,  ?,?,?)");
 
         String sql = sb.toString();
         System.err.println(sql);
         try (
                 Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
             int i = 0;
-            stmt.setString(++i, item.getId());
+            stmt.setString(++i, url.getId());
+            stmt.setString(++i, url.getUrl());
+            stmt.setString(++i, url.getName());
             //
-            stmt.setString(++i, item.getLabel());
-            stmt.setString(++i, item.getDisambiguation());
-            stmt.setString(++i, item.getDescription());
-            //
-            stmt.setString(++i, item.getAttributes());
-            stmt.setString(++i, item.getAliases());
-            stmt.setInt(++i, item.getEntryPointItem() ? 1 : 0);
+            stmt.setString(++i, url.getItemId());
+            stmt.setInt(++i, url.getOfficial() ? 1 : 0);
             stmt.setString(++i, UniversalDateTime.now().toString());
 
             //
             stmt.execute();
             System.out.println(stmt.toString());
 
-            return item.getId();
+            return url.getId();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UrlRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.err.println("Error.");
         return "";
     }
 
     @Override
-    public Item read(String id) {
+    public Url read(String id) {
         if (id == null) {
             throw new RuntimeException("id is null");
         }
         StringBuilder sb = new StringBuilder();
         sb
                 .append("SELECT * FROM ")
-                .append(ItemTable.TABLE_NAME)
+                .append(UrlTable.TABLE_NAME)
                 .append(" WHERE ")
-                .append(ItemTable.ID)
+                .append(UrlTable.ID)
                 .append("=?");
 
         String sql = sb.toString();
@@ -202,43 +215,49 @@ public class ItemRepoImplSqlite implements ItemRepo {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                return extractItemFromResultSet(rs);
+                return extractUrlFromResultSet(rs);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UrlRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (rs != null) {
                     rs.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UrlRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
 
     @Override
-    public void update(Item item) {
-        if(item.getDisambiguation() == null) {
-            item.setDisambiguation("");
+    public void update(Url url) {
+        if (url.getOfficial() == null) {
+            url.setOfficial(false);
         }
-        
+        if (url.getName() == null) {
+            url.setName("");
+        }
+        if (url.getUrl() != null) {
+            url.setUrl(url.getUrl().trim());
+        }
+        if (url.getUrl() != null && url.getUrl().endsWith("/")) {
+            url.setUrl(url.getUrl().substring(0, url.getUrl().length() - 1));
+        }
+
         StringBuilder sb = new StringBuilder();
         sb
                 .append("UPDATE ")
-                .append(ItemTable.TABLE_NAME)
+                .append(UrlTable.TABLE_NAME)
                 .append(" SET ")
-                .append(ItemTable.LABEL).append("=?, ")
-                .append(ItemTable.DISAMBIGUATION).append("=?, ")
-                .append(ItemTable.DESCRIPTION).append("=?, ")
-                //
-                .append(ItemTable.ATTRIBUTES).append("=?, ")
-                .append(ItemTable.ALIASES).append("=?, ")
-                .append(ItemTable.ENTRY_POINT_ITEM).append("=? ")
+                .append(UrlTable.URL).append("=?, ")
+                .append(UrlTable.NAME).append("=?, ")
+                .append(UrlTable.ITEM_ID).append("=?, ")
+                .append(UrlTable.OFFICIAL).append("=? ")
                 .append(" WHERE ").append(ItemTable.ID).append("=?");
 
         String sql = sb.toString();
@@ -246,69 +265,52 @@ public class ItemRepoImplSqlite implements ItemRepo {
         try (
                 Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
             int i = 0;
-            stmt.setString(++i, item.getLabel());
-            stmt.setString(++i, item.getDisambiguation());
-            stmt.setString(++i, item.getDescription());
+            stmt.setString(++i, url.getUrl());
+            stmt.setString(++i, url.getName());
+            stmt.setString(++i, url.getItemId());
+            stmt.setInt(++i, url.getOfficial() ? 1 : 0);
             //
-            stmt.setString(++i, item.getAttributes());
-            stmt.setString(++i, item.getAliases());
-            stmt.setBoolean(++i, item.getEntryPointItem() == null ? false : item.getEntryPointItem().booleanValue());
-            //
-            stmt.setString(++i, item.getId());
-
+            stmt.setString(++i, url.getId());
+            System.out.println(stmt.toString());
             int numberOfUpdatedRows = stmt.executeUpdate();
             System.out.println("numberOfUpdatedRows=" + numberOfUpdatedRows);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UrlRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public String getLabel(String id) {
-        if (id == null) {
-            throw new RuntimeException("id is null");
-        }
+    public void delete(String id) {
+
         StringBuilder sb = new StringBuilder();
         sb
-                .append("SELECT ")
-                .append(ItemTable.LABEL)
-                .append(" FROM ")
-                .append(ItemTable.TABLE_NAME)
-                .append(" WHERE ")
-                .append(ItemTable.ID)
-                .append("=?");
+                .append("DELETE FROM ")
+                .append(UrlTable.TABLE_NAME);
+        sb.append(" WHERE ");
 
+        sb.append(UrlTable.ID);
+        sb.append("=?");
         String sql = sb.toString();
+        System.err.println("SQL::" + sql);
         int i = 0;
-        ResultSet rs = null;
+
         try (
                 Connection connection = sqliteConnectionFactory.createConnection(); PreparedStatement stmt = connection.prepareStatement(sql);) {
 
             stmt.setString(++i, id);
 
-            rs = stmt.executeQuery();
+            System.err.println(stmt.toString());
+            stmt.execute();
 
-            while (rs.next()) {
-                return rs.getString(ItemTable.LABEL);
-            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(ItemRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Logger.getLogger(StatementRepoImplSqlite.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "[unknown]";
     }
 
 }

@@ -1,8 +1,10 @@
 <%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.StatementRepo"%>
+<%@page import="org.nanoboot.nanodata.persistence.api.UrlRepo"%>
 <%@page import="org.nanoboot.nanodata.entity.Item"%>
 <%@page import="org.nanoboot.nanodata.entity.Statement"%>
+<%@page import="org.nanoboot.nanodata.entity.Url"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
 <%@page import="java.util.Scanner"%>
@@ -81,6 +83,7 @@
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
         StatementRepo statementRepo = context.getBean("statementRepoImplSqlite", StatementRepo.class);
+        UrlRepo urlRepo = context.getBean("urlRepoImplSqlite", UrlRepo.class);
         ItemRepo itemRepo = context.getBean("itemRepoImplSqlite", ItemRepo.class);
         Item item = itemRepo.read(id);
 
@@ -140,18 +143,21 @@
   }
 </script>
 
+<style>
+    .section_header {
+        color:green;font-weight:700;border:2px solid blue;background:yellow;font-size:140%;margin:20px;padding:5px;display:block;max-width:350px;
+    }
+</style>
 
 
 
-
-    <span style="color:green;font-weight:700;border:2px solid blue;background:yellow;font-size:200%;margin:20px;padding:5px;display:block;max-width:400px;">Data</span>
+    <span class="section_header">Data</span>
     <table ondblclick = "redirectToUpdate()">
         <tr>
         <th>ID</th><td><%=item.getId()%> <button onclick="copyId()">Copy</button></td></tr>
         <tr><th>Label</th><td><%=item.getLabel()%></a></td></tr>
         <tr><th>Disambiguation</th><td><%=Utils.formatToHtml(item.getDisambiguation())%></td></tr>
         <tr><th>Description</th><td><%=Utils.formatToHtml(item.getDescription())%></td></tr>
-        <tr><th>Url</th><td><%=Utils.formatToHtml(item.getUrl())%></td></tr>
         <tr><th>Attributes</th><td><pre><%=Utils.formatToHtml(item.getAttributes())%></pre></td></tr>
         <tr><th>Aliases</th><td><%=Utils.formatToHtml(item.getAliases())%></td></tr>
         <tr><th>Entry Point Item</th><td><%=Utils.formatToHtml(item.getEntryPointItem())%></td></tr>
@@ -160,7 +166,7 @@
 
     </table>
 
-    <span style="color:green;font-weight:700;border:2px solid blue;background:yellow;font-size:200%;margin:20px;padding:5px;display:block;max-width:400px;">Statements</span>
+    <span class="section_header">Statements</span>
     
     <% if(canUpdate) { %>
     <a href="create_statement.jsp?source=<%=item.getId()%>" style="margin-left:20px;font-size:110%;background:#dddddd;border:2px solid #bbbbbb;padding:1px;text-decoration:none;margin-bottom:20px !important;">Add</a>
@@ -253,7 +259,12 @@
 <% } %>
 
 
-<span style="color:green;font-weight:700;border:2px solid blue;background:yellow;font-size:200%;margin:20px;padding:5px;display:block;max-width:400px;">Reverse statements</span>
+
+
+
+
+
+<span class="section_header">Reverse statements</span>
 <!--<a href="create_statement.jsp?source=<%=item.getId()%>" style="margin-left:20px;font-size:110%;background:#dddddd;border:2px solid #bbbbbb;padding:1px;text-decoration:none;margin-bottom:20px !important;">Add</a>-->
 
 <%
@@ -290,24 +301,6 @@
 
     <tbody>
 
-    <style>
-
-        tr td a img {
-            border:2px solid grey;
-            background:#dddddd;
-            padding:4px;
-            width:30%;
-            height:30%;
-        }
-        tr td a img:hover {
-            border:3px solid #888888;
-            padding:2px;
-        }
-        tr td {
-            padding-right:2px;
-        }
-    </style>
-
 
     <%
         for (Statement i: reverseStatements) {
@@ -343,7 +336,92 @@
 
 
 
-<span style="color:green;font-weight:700;border:2px solid blue;background:yellow;font-size:200%;margin:20px;padding:5px;display:block;max-width:400px;">Content</span>
+
+
+
+
+<span class="section_header">Urls</span>
+
+    <% if(canUpdate) { %>
+    <a href="create_url.jsp?item_id=<%=item.getId()%>" style="margin-left:20px;font-size:110%;background:#dddddd;border:2px solid #bbbbbb;padding:1px;text-decoration:none;margin-bottom:20px !important;">Add</a>
+    <br><br>
+    <%}%>
+    
+<%
+    List<Url> urls = urlRepo.list(
+            1,
+            100,
+            null,
+            null,
+            item.getId()
+    );
+
+    if (urls.isEmpty()) {
+
+%><span style="font-weight:bold;color:orange;" class="margin_left_and_big_font">Nothing found.</span>
+
+<%
+    } else {
+%>
+
+<table>
+    <thead>
+        <tr>
+            <!--<th title="ID">ID</th>-->
+
+            <th style="width:170px;"></th>
+            <th>Url</th>
+            <th>Name</th>
+            <th>Item</th>
+            <th>Official</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+
+
+    <%
+        for (Url u: urls) {
+    %>
+    <tr>
+        <!--<td><%=u.getId()%></td>-->
+
+
+
+        <td>
+            <a href="read_url.jsp?id=<%=u.getId()%>">Read</a>
+
+<!--<% if(canUpdate) { %><a href="update_item.jsp?id=<%=u.getId()%>"><img src="images/update.png" title="Update" width="48" height="48" /></a><%}%>-->
+            <% if(canUpdate) { %>
+            <a href="update_url.jsp?id=<%=u.getId()%>">Update</a>
+            <a href="delete_url.jsp?id=<%=u.getId()%>" target="_blank">Delete</a>
+            <%}%>
+        </td>
+        <td><a href="<%=u.getUrl()%>"><%=u.getUrl()%></a></td>
+        <td><%=u.getName()%></td>
+        <td><a href="read_item.jsp?id=<%=u.getItemId()%>"><%=itemRepo.getLabel(u.getItemId())%></a></td>
+        <td><%=Utils.formatToHtml(u.getOfficial())%></td>
+
+
+    </tr>
+    <%
+        }
+    %>
+</tbody>
+</table>
+<% } %>
+
+
+
+
+
+
+
+
+
+
+<span class="section_header">Content</span>
 <%
     String filePath = System.getProperty("nanodata.confpath") + "/" + "content/" + id.charAt(0) + id.charAt(1) + "/" + id.charAt(2) + id.charAt(3) + "/"+ id ;
     File dir = new File(filePath);
@@ -369,7 +447,7 @@ System.err.println("filePath=" + filePath);
     }
 %>
 
-<span style="color:green;font-weight:700;border:2px solid blue;background:yellow;font-size:200%;margin:20px;padding:5px;display:block;max-width:400px;">Files</span>
+<span class="section_header">Files</span>
 
 <ul style="font-size:120%;line-height:160%;">
     <%

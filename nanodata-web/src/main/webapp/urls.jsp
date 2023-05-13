@@ -1,9 +1,10 @@
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
 <%@page import="java.util.List"%>
+<%@page import="org.nanoboot.nanodata.persistence.api.UrlRepo"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
-<%@page import="org.nanoboot.nanodata.entity.Item"%>
+<%@page import="org.nanoboot.nanodata.entity.Url"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
+<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
 <!DOCTYPE>
 <%@ page session="false" %>
 
@@ -30,7 +31,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>List items - Nanodata</title>
+        <title>List urls - Nanodata</title>
         <link rel="stylesheet" type="text/css" href="styles/nanodata.css">
         <link rel="icon" type="image/x-icon" href="favicon.ico" sizes="32x32">
     </head>
@@ -40,12 +41,12 @@
         <a href="index.jsp" id="main_title">Nanodata</a></span>
 
     <span class="nav"><a href="index.jsp">Home</a>
-        >> <a href="items.jsp" class="nav_a_current">Items</a>
+        >> <a href="urls.jsp" class="nav_a_current">Urls</a>
 
 
         <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
         <% if(canUpdate) { %>
-        >> <a href="create_item.jsp">Add Item</a>
+        >> <a href="create_url.jsp">Add Url</a>
         <% } %>
 
 
@@ -54,6 +55,7 @@
 
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        UrlRepo urlRepo = context.getBean("urlRepoImplSqlite", UrlRepo.class);
         ItemRepo itemRepo = context.getBean("itemRepoImplSqlite", ItemRepo.class);
     %>
 
@@ -73,11 +75,13 @@
     <%
         final String EMPTY = "<span style=\"color:grey;font-size:75%;\">[empty]</span>";
         String id = request.getParameter("id");
-        String label = request.getParameter("label");
-        String disambiguation = request.getParameter("disambiguation");
-        String description = request.getParameter("description");
-        String aliases = request.getParameter("aliases");
-        String entryPointItem = request.getParameter("entryPointItem");
+        String url = request.getParameter("url");
+        if(url == null) {url = "";}
+        String name = request.getParameter("name");
+        if(name == null) {name = "";}
+        String item_id = request.getParameter("item_id");
+        if(item_id == null) {item_id = "";}
+        String official = request.getParameter("official");
 
         String pageNumber = request.getParameter("pageNumber");
         String previousNextPage = request.getParameter("PreviousNextPage");
@@ -94,15 +98,15 @@
     %>
 
 
-    <form action="items.jsp" method="get">
+    <form action="urls.jsp" method="get">
 
         <label for="pageNumber">Page </label><input type="text" name="pageNumber" value="<%=pageNumberInt%>" size="4" style="margin-right:10px;">
         <label for="id">ID</label><input type="text" name="id" value="<%=id != null ? id : ""%>" size="5" style="margin-right:10px;">
-        <label for="label">Label</label><input type="text" name="label" value="<%=label != null ? label : ""%>" style="margin-right:10px;max-width:100px;">
-        <label for="disambiguation">Disambiguation</label><input type="text" name="disambiguation" <%=disambiguation != null ? disambiguation : ""%> style="max-width:100px;">
-        <label for="description">Description</label><input type="text" name="description" <%=description != null ? description : ""%>  style="max-width:100px;">
-       <label for="aliases">Aliases</label><input type="text" name="aliases"  <%=aliases != null ? aliases : ""%> style="max-width:100px;">
-        <label for="entryPointItem">Entry Point Item</label><input type="checkbox" name="entryPointItem"  <%=entryPointItem != null && entryPointItem.equals("1") ? "checked " : ""%>value="1">
+        <label for="url">Url</label><input type="text" name="url" value="<%=url%>" style="margin-right:10px;max-width:100px;">
+        <label for="name">Name</label><input type="text" name="name" value="<%=name != null ? name : ""%>" style="max-width:100px;">
+        <label for="item_id">Item id</label><input type="text" name="item_id" value="<%=item_id%>" style="max-width:100px;">
+        <label for="official">Official</label><input type="checkbox" name="official"  <%=official != null && official.equals("1") ? "checked " : ""%>value="1">
+
 
         <input type="submit" value="Filter" style="margin-left:20px;height:40px;">
         <br>
@@ -113,15 +117,15 @@
     </form>
 
     <%
-        List<Item> items = itemRepo.list(
+        List<Url> urls = urlRepo.list(
                 pageNumberInt,
                 10,
-                /*id,*/
-                label == null || label.isEmpty() ? null : label, 
-                org.nanoboot.nanodata.persistence.api.TextPosition.DOES_NOT_MATTER
+                null,
+                null,
+                null
         );
 
-        if (items.isEmpty()) {
+        if (urls.isEmpty()) {
 
     %><span style="font-weight:bold;color:orange;" class="margin_left_and_big_font">Warning: Nothing found.</span>
 
@@ -133,14 +137,12 @@
         <thead>
             <tr>
                 <!--<th title="ID">ID</th>-->
-                
-                
-                <th style="width:130px;"></th>
-                <th>Label</th>
-                <th>Disambiguation</th>
-                <th>Description</th>
-                <th>Aliases</th>
-                <th>Entry Point Item</th>
+
+                <th style="width:170px;"></th>
+                <th>Url</th>
+                <th>Name</th>
+                <th>Item</th>
+                <th>Official</th>
             </tr>
         </thead>
 
@@ -166,27 +168,28 @@
 
 
         <%
-            for (Item i: items) {
+            for (Url u: urls) {
         %>
         <tr>
-            <!--<td><%=i.getId()%></td>-->
+            <!--<td><%=u.getId()%></td>-->
 
 
-            
-            
-                        <td>
-                            <a href="read_item.jsp?id=<%=i.getId()%>">Read</a>
-                <!--<a href="read_item.jsp?id=<%=i.getId()%>"><img src="images/read.png" title="View" width="48" height="48" /></a>-->
-                <!--<% if(canUpdate) { %><a href="update_item.jsp?id=<%=i.getId()%>"><img src="images/update.png" title="Update" width="48" height="48" /></a><%}%>-->
-                <% if(canUpdate) { %><a href="update_item.jsp?id=<%=i.getId()%>">Update</a><%}%>
+
+            <td>
+                <a href="read_url.jsp?id=<%=u.getId()%>">Read</a>
+
+<!--<a href="read_item.jsp?id=<%=u.getId()%>"><img src="images/read.png" title="View" width="48" height="48" /></a>-->
+<!--<% if(canUpdate) { %><a href="update_item.jsp?id=<%=u.getId()%>"><img src="images/update.png" title="Update" width="48" height="48" /></a><%}%>-->
+                <% if(canUpdate) { %>
+                <a href="update_url.jsp?id=<%=u.getId()%>">Update</a> 
+                <a href="delete_url.jsp?id=<%=u.getId()%>" target="_blank">Delete</a>
+
+                <%}%>
             </td>
-            
-            <td><%=i.getLabel()%></td>
-            
-            <td><%=i.getDisambiguation() == null ? EMPTY : i.getDisambiguation()%></td>
-            <td><%=i.getDescription() == null ? EMPTY : i.getDescription()%></td>
-            <td><%=i.getAliases() == null ? EMPTY : i.getAliases()%></td>
-            <td><%=org.nanoboot.nanodata.web.misc.utils.Utils.formatToHtml(i.getEntryPointItem())%></td>
+            <td><a href="<%=u.getUrl()%>"><%=u.getUrl()%></a></td>
+            <td><%=u.getName()%></td>
+            <td><a href="read_item.jsp?id=<%=u.getItemId()%>"><%=itemRepo.getLabel(u.getItemId())%></a></td>
+            <td><%=Utils.formatToHtml(u.getOfficial())%></td>
 
 
         </tr>

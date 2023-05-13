@@ -46,5 +46,9 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
     <bean id="statementRepoImplSqlite" class="org.nanoboot.nanodata.persistence.impl.sqlite.StatementRepoImplSqlite">
         <property name="sqliteConnectionFactory" ref="sqliteConnectionFactory" />
     </bean>
+    
+    <bean id="urlRepoImplSqlite" class="org.nanoboot.nanodata.persistence.impl.sqlite.UrlRepoImplSqlite">
+        <property name="sqliteConnectionFactory" ref="sqliteConnectionFactory" />
+    </bean>
 
 </beans>

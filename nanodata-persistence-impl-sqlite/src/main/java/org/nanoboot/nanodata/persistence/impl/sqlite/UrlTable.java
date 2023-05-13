@@ -22,21 +22,18 @@ package org.nanoboot.nanodata.persistence.impl.sqlite;
  *
  * @author robertvokac
  */
-public class ItemTable {
-    public static final String TABLE_NAME = "ITEM";
+public class UrlTable {
+    public static final String TABLE_NAME = "URL";
     
     public static final String ID = "ID";
-    public static final String LABEL = "LABEL";
-    public static final String DISAMBIGUATION = "DISAMBIGUATION";
-    public static final String DESCRIPTION = "DESCRIPTION";
-    public static final String ATTRIBUTES = "ATTRIBUTES";
+    public static final String URL = "URL";
+    public static final String NAME = "NAME";
     //
-    public static final String ALIASES = "ALIASES";
-    public static final String ENTRY_POINT_ITEM = "ENTRY_POINT_ITEM";
-    public static final String CREATED_AT = "CREATED_AT";
+    public static final String ITEM_ID = "ITEM_ID";
+    public static final String OFFICIAL = "OFFICIAL";
+    public static final String CREATED_AT = "CREATED_AT";    
     
-    
-    private ItemTable() {
+    private UrlTable() {
         //Not meant to be instantiated.
     }
 

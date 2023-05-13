@@ -35,7 +35,8 @@
 
        <span class="nav"><a href="index.jsp" class="nav_a_current">Home</a>
         >> <a href="items.jsp">Items</a>
-        <a href="statements.jsp">Statements</a></span>
+        <a href="statements.jsp">Statements</a>
+        <a href="urls.jsp">Urls</a></span>
 
 
     <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>

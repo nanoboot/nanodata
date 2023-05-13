@@ -1,7 +1,7 @@
 <%@page import="org.nanoboot.powerframework.time.moment.LocalDate"%>
 <%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
-<%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
-<%@page import="org.nanoboot.nanodata.entity.Item"%>
+<%@page import="org.nanoboot.nanodata.persistence.api.UrlRepo"%>
+<%@page import="org.nanoboot.nanodata.entity.Url"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
 
@@ -36,7 +36,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Update item - Nanodata</title>
+        <title>Update url - Nanodata</title>
         <link rel="stylesheet" type="text/css" href="styles/nanodata.css">
         <link rel="icon" type="image/x-icon" href="favicon.ico" sizes="32x32">
     </head>
@@ -57,11 +57,10 @@
     %>
 
     <span class="nav"><a href="index.jsp">Home</a>
-        >> <a href="items.jsp">Items</a>
-        >> <a href="read_item.jsp?id=<%=id%>">Read</a>
-        <a href="update_item.jsp?id=<%=id%>" class="nav_a_current">Update</a>
-        <a href="edit_content.jsp?id=<%=id%>">Edit</a>
-        <a href="upload_file.jsp?id=<%=id%>">Upload</a>
+        >> <a href="urls.jsp">Urls</a>
+        >> <a href="read_url.jsp?id=<%=id%>">Read</a>
+        <a href="update_url.jsp?id=<%=id%>" class="nav_a_current">Update</a>
+        <a href="delete_url.jsp?id=<%=id%>">Delete</a>
 
 
     </span>
@@ -74,114 +73,85 @@
     %>
     <%
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-        ItemRepo itemRepo = context.getBean("itemRepoImplSqlite", ItemRepo.class);
-        Item item = itemRepo.read(id);
+        UrlRepo urlRepo = context.getBean("urlRepoImplSqlite", UrlRepo.class);
+        Url url = urlRepo.read(id);
 
-        if (item == null) {
-    %><span style="font-weight:bold;color:red;" class="margin_left_and_big_font">Error: item with id <%=id%> was not found.</span>
+        if (url == null) {
+    %><span style="font-weight:bold;color:red;" class="margin_left_and_big_font">Error: url with id <%=id%> was not found.</span>
 
     <%
             throw new jakarta.servlet.jsp.SkipPageException();
         }
-        String param_label = request.getParameter("label");
-        boolean formToBeProcessed = param_label != null && !param_label.isEmpty();
+        String param_url = request.getParameter("url");
+        boolean formToBeProcessed = param_url != null && !param_url.isEmpty();
     %>
 
-    
+
     <% if (!formToBeProcessed) {%>
-    <form action="update_item.jsp" method="get">
+    <form action="update_url.jsp" method="get">
         <table>
             <tr>
                 <td><label for="id">ID <b style="color:red;font-size:130%;">*</b>:</label></td>
                 <td><input type="text" name="id" value="<%=id%>" readonly style="background:#dddddd;"></td>
             </tr>
             <tr>
-                <td><label for="label">Label <b style="color:red;font-size:130%;">*</b>:</label></td>
-                <td><input type="text" name="label" value="<%=item.getLabel()%>"></td>
+                <td><label for="url">Url <b style="color:red;font-size:130%;">*</b>:</label></td>
+                <td><input type="text" name="url" value="<%=url.getUrl()%>"></td>
             </tr>
             <tr>
-                <td><label for="disambiguation">Disambiguation:</label></td>
-                <td><input type="text" name="disambiguation" value="<%=item.getDisambiguation() == null ? "" : item.getDisambiguation()%>"></td>
+                <td><label for="name">Name</label></td>
+                <td><input type="text" name="name" value="<%=url.getName() == null ? "" : url.getName()%>"></td>
             </tr>
             <tr>
-                <td><label for="description">Description:</label></td>
-                <td><input type="text" name="description" value="<%=item.getDescription() == null ? "" : item.getDescription()%>"></td>
+                <td><label for="item_id">Item id</label></td>
+                <td><input type="text" name="item_id" value="<%=url.getItemId()%>"></td>
             </tr>
             <tr>
-                <td><label for="attributes">Attributes:</label></td>
-                <td><textarea style="width:100%;height:100px;" name="attributes"><%=item.getAttributes() == null ? "" : item.getAttributes()%></textarea></td>
-            </tr>
-            <tr>
-                <td><label for="aliases">Aliases:</label></td>
-                <td><input type="text" name="aliases" value="<%=item.getAliases() == null ? "" : item.getAliases()%>"></td>
-            </tr>
-
-            <tr>
-                <td><label for="entryPointItem">Entry point item</label></td>
+                <td><label for="official">Official</label></td>
                 <td style="text-align:left;">
-                    <input type="checkbox" name="entryPointItem" value="1" <%=item.getEntryPointItem().booleanValue() ? "checked" : ""%> >
+                    <input type="checkbox" name="official" value="1" <%=url.getOfficial().booleanValue() ? "checked" : ""%> >
                 </td>
             </tr>
 
-           
+
 
 
             <tr>
-                <td><a href="variants.jsp" style="font-size:130%;background:#dddddd;border:2px solid #bbbbbb;padding:2px;text-decoration:none;">Cancel</a></td>
+                <td><a href="urls.jsp" style="font-size:130%;background:#dddddd;border:2px solid #bbbbbb;padding:2px;text-decoration:none;">Cancel</a></td>
                 <td style="text-align:right;"><input type="submit" value="Update"></td>
             </tr>
         </table>
         <b style="color:red;font-size:200%;margin-left:20px;">*</b> ...mandatory
 
 
-        
 
-    
+
+
     </form>
 
     <% } else { %>
 
-    
-    
+
+
     <%
-        String param_disambiguation = request.getParameter("disambiguation");
-
-        String param_description = request.getParameter("description");
-
-        String param_attributes = request.getParameter("attributes");
-        String param_aliases = request.getParameter("aliases");
-        String param_entryPointItem = request.getParameter("entryPointItem");
+        
+     String param_name = request.getParameter("name");
+     String param_official = request.getParameter("official");
+     if(param_official == null) {
+     param_official = "0";
+        }
+     String param_item_id = request.getParameter("item_id");
+     
         //
-        if (param_disambiguation != null && param_disambiguation.isEmpty()) {
-            param_disambiguation = null;
-        }
-        if (param_description != null && param_description.isEmpty()) {
-            param_description = null;
-        }
-        if (param_attributes != null && param_attributes.isEmpty()) {
-            param_attributes = null;
-        }
-        if (param_aliases != null && param_aliases.isEmpty()) {
-            param_aliases = null;
-        }
-        if (param_entryPointItem != null && param_entryPointItem.isEmpty()) {
-            param_entryPointItem = null;
-        }
-      
-        //
-        //
-        Item updatedItem = new Item(
+        Url updatedUrl = new Url(
                 id,
-                param_label,
-                param_disambiguation,
-                param_description,
-                param_attributes,
-                param_aliases,
-                param_entryPointItem == null ? null : Boolean.valueOf(param_entryPointItem.equals("1")), 
+                param_url,
+                param_name,
+                param_item_id,
+                Boolean.valueOf(param_official.equals("1")),
                 null
         );
-
-        itemRepo.update(updatedItem);
+        urlRepo.update(updatedUrl);
 
 
     %>
@@ -189,7 +159,7 @@
 
     <script>
         function redirectToRead() {
-            window.location.href = 'read_item.jsp?id=<%=id%>'
+            window.location.href = 'read_url.jsp?id=<%=id%>'
         }
         redirectToRead();
     </script>

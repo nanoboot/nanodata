@@ -16,28 +16,29 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ///////////////////////////////////////////////////////////////////////////////////////////////
-package org.nanoboot.nanodata.persistence.impl.sqlite;
+
+package org.nanoboot.nanodata.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+
 
 /**
  *
- * @author robertvokac
+ * @author <a href="mailto:robertvokac@nanoboot.org">Robert Vokac</a>
+ * @since 0.0.0
  */
-public class ItemTable {
-    public static final String TABLE_NAME = "ITEM";
-    
-    public static final String ID = "ID";
-    public static final String LABEL = "LABEL";
-    public static final String DISAMBIGUATION = "DISAMBIGUATION";
-    public static final String DESCRIPTION = "DESCRIPTION";
-    public static final String ATTRIBUTES = "ATTRIBUTES";
-    //
-    public static final String ALIASES = "ALIASES";
-    public static final String ENTRY_POINT_ITEM = "ENTRY_POINT_ITEM";
-    public static final String CREATED_AT = "CREATED_AT";
-    
-    
-    private ItemTable() {
-        //Not meant to be instantiated.
-    }
+@Data
+@AllArgsConstructor
+@ToString
+public class Url {
 
+    private String id;
+    private String url;
+    private String name;
+    private String itemId;
+    private Boolean official;
+    private String createdAt;
+    
 }
