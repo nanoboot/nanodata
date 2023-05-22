@@ -166,6 +166,10 @@
                             } else {
                             String filePath = System.getProperty("nanodata.confpath") + "/" + "content/" + id.charAt(0) + id.charAt(1) + "/" + id.charAt(2) + id.charAt(3) + "/"+ id ;
                                 File newFile = new File(filePath + "/" + origFileName);
+                                File parentDir = new File(filePath);
+                                if(!parentDir.exists()) {
+                                    parentDir.mkdirs();
+                                }
                                 new File(tmpFileName).renameTo(newFile);
                                 ////
 //                                byte[] sha512sumByteArray = MessageDigest.getInstance("SHA-512").digest(Files.readAllBytes(Paths.get(newFile.getAbsolutePath())));
