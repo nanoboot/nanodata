@@ -30,9 +30,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
         <constructor-arg value="abc123"/>
     </bean>
 
-    <!--<bean id="websiteRepoImplMock" class="org.nanoboot.nanodata.persistence.impl.mock.WebsiteRepoImplMock"></bean>
-    <bean id="variantRepoImplMock" class="org.nanoboot.nanodata.persistence.impl.mock.VariantRepoImplMock"></bean>-->
-
+    
     <bean id="sqliteDatabaseMigration"
           class="org.nanoboot.nanodata.persistence.impl.sqlite.SqliteDatabaseMigration" init-method="migrate">
     </bean>

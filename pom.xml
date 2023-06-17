@@ -241,11 +241,6 @@
             </dependency>
             <dependency>
                 <groupId>org.nanoboot.nanodata</groupId>
-                <artifactId>nanodata-persistence-impl-mock</artifactId>
-                <version>${nanodata.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.nanoboot.nanodata</groupId>
                 <artifactId>nanodata-persistence-impl-sqlite</artifactId>
                 <version>${nanodata.version}</version>
             </dependency>

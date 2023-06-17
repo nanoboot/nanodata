@@ -124,10 +124,6 @@
             <groupId>org.nanoboot.nanodata</groupId>
             <artifactId>nanodata-persistence-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.nanoboot.nanodata</groupId>
-            <artifactId>nanodata-persistence-impl-mock</artifactId>
-        </dependency>
         
         <dependency>
             <groupId>org.nanoboot.nanodata</groupId>
