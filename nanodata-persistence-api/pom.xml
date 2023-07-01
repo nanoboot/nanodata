@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.nanoboot.nanodata</groupId>
         <artifactId>nanodata-parent</artifactId>
-        <version>0.0.0-SNAPSHOT</version>
+        <version>0.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
