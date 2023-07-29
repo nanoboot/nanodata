@@ -317,5 +317,43 @@
             
         </dependencies>
     </dependencyManagement>
+    
+        <repositories>
+        <repository>
+            <id>releases</id>
+            <name>nanoboot-releases-repository</name>
+            <url>https://maven.nanoboot.org/releases</url>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <name>nanoboot-snapshots-repository</name>
+            <url>https://maven.nanoboot.org/snapshots</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>releases</id>
+            <name>nanoboot-releases-repository</name>
+            <url>https://maven.nanoboot.org/releases</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>snapshots</id>
+            <name>nanoboot-snapshots-repository</name>
+            <url>https://maven.nanoboot.org/snapshots</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>nanoboot-releases-repository</id>
+            <url>https://maven.nanoboot.org/releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>nanoboot-snapshots-repository</id>
+            <url>https://maven.nanoboot.org/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
