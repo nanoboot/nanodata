@@ -73,6 +73,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>org.nanoboot.octagon.jakarta.filters.AuthenticationFilter</filter-class>
+    </filter>
+    
+<!--    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>-->
+    
     <jsp-config>
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>
@@ -80,4 +90,13 @@
         </jsp-property-group>
     </jsp-config>
 
+    <context-param>
+        <param-name>octagon.application-code</param-name>
+        <param-value>nanodata</param-value>
+    </context-param>
+    
+    <listener>
+        <listener-class>org.nanoboot.octagon.jakarta.listeners.ApplicationCodeListener</listener-class>
+    </listener>
+    
 </web-app>

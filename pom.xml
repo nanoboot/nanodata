@@ -50,6 +50,7 @@
         <power.version>2.0.1-SNAPSHOT</power.version>
         <checkstyle.skip>true</checkstyle.skip><!-- TODO: make false-->
         <db-migration-core.version>0.1.1-SNAPSHOT</db-migration-core.version>
+        <octagon.version>2.0.0-SNAPSHOT</octagon.version>
     </properties>
 
     <build>
