@@ -85,7 +85,7 @@ tomcat10test
                         systemdService=tomcat10
         		        ;;
     		        
-      		          develop | jenkins | deploy_test)
+      		          develop | jenkins | deploy_test | feature/octagon)
         		        echo Branch $BRANCH_NAME is supported. Continuing.
                         TOMCAT_HOME=$TOMCAT10_TEST_HOME
                         systemdService=tomcat10test
