@@ -29,7 +29,7 @@
 
     <%@page import="java.util.Scanner"%>
     <%@page import="java.io.File"%>
-    <%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+    <%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
     <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
     <%@page import="org.springframework.context.ApplicationContext"%>
 
@@ -70,7 +70,7 @@
         </span>
 
         <%
-            if (org.nanoboot.nanodata.web.misc.utils.Utils.cannotUpdate(request)) {
+            if (org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.cannotUpdate(request)) {
                 out.println("Access forbidden");
                 throw new jakarta.servlet.jsp.SkipPageException();
             }

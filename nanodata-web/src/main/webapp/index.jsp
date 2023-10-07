@@ -39,7 +39,7 @@
         <a href="urls.jsp">Urls</a></span>
 
 
-    <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+    <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
 <% if(canUpdate) { %>
 <form action="<%=request.getContextPath()%>/LogoutServlet" method="post" style="display:inline;margin-left:20px;">
 <input type="submit" value="Logout" >

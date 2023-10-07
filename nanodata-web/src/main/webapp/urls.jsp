@@ -4,7 +4,7 @@
 <%@page import="org.nanoboot.nanodata.entity.Url"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+<%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
 <!DOCTYPE>
 <%@ page session="false" %>
 
@@ -44,7 +44,7 @@
         >> <a href="urls.jsp" class="nav_a_current">Urls</a>
 
 
-        <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+        <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
         <% if(canUpdate) { %>
         >> <a href="create_url.jsp">Add Url</a>
         <% } %>
@@ -189,7 +189,7 @@
             <td><a href="<%=u.getUrl()%>"><%=u.getUrl()%></a></td>
             <td><%=u.getName()%></td>
             <td><a href="read_item.jsp?id=<%=u.getItemId()%>"><%=itemRepo.getLabel(u.getItemId())%></a></td>
-            <td><%=Utils.formatToHtml(u.getOfficial())%></td>
+            <td><%=OctagonJakartaUtils.formatToHtml(u.getOfficial())%></td>
 
 
         </tr>

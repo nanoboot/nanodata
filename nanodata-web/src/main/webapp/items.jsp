@@ -1,4 +1,4 @@
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+<%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
 <%@page import="java.util.List"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
 <%@page import="org.nanoboot.nanodata.entity.Item"%>
@@ -43,7 +43,7 @@
         >> <a href="items.jsp" class="nav_a_current">Items</a>
 
 
-        <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+        <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
         <% if(canUpdate) { %>
         >> <a href="create_item.jsp">Add Item</a>
         <% } %>
@@ -186,7 +186,7 @@
             <td><%=i.getDisambiguation() == null ? EMPTY : i.getDisambiguation()%></td>
             <td><%=i.getDescription() == null ? EMPTY : i.getDescription()%></td>
             <td><%=i.getAliases() == null ? EMPTY : i.getAliases()%></td>
-            <td><%=org.nanoboot.nanodata.web.misc.utils.Utils.formatToHtml(i.getEntryPointItem())%></td>
+            <td><%=org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.formatToHtml(i.getEntryPointItem())%></td>
 
 
         </tr>

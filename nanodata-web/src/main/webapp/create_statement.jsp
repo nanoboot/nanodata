@@ -40,7 +40,7 @@
         >> <a href="create_statement.jsp" class="nav_a_current">Add Statement</a></span>
         
     <%
-        if (org.nanoboot.nanodata.web.misc.utils.Utils.cannotUpdate(request)) {
+        if (org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.cannotUpdate(request)) {
             out.println("Access forbidden");
             throw new jakarta.servlet.jsp.SkipPageException();
         }

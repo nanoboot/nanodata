@@ -1,4 +1,4 @@
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+<%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.UrlRepo"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
 <%@page import="org.nanoboot.nanodata.entity.Url"%>
@@ -62,7 +62,7 @@
         <a href="read_url.jsp?id=<%=id%>" class="nav_a_current">Read</a>
         
         
-                    <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+                    <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
 <% if(canUpdate) { %>
         <a href="update_url.jsp?id=<%=id%>">Update</a>
         <a href="delete_url.jsp?id=<%=id%>">Delete</a>
@@ -118,9 +118,9 @@ window.location.href = 'update_url.jsp?id=<%=id%>'
         <tr>
             <th>ID</th><td><%=url.getId()%></td></tr>
         <tr><th>Url</th><td><a href="<%=url.getUrl()%>"><%=url.getUrl()%></a></td></tr>
-        <tr><th>Name</th><td><%=Utils.formatToHtml(url.getName())%></td></tr>
+        <tr><th>Name</th><td><%=OctagonJakartaUtils.formatToHtml(url.getName())%></td></tr>
         <tr><th>Item</th><td><a href="read_item.jsp?id=<%=url.getItemId()%>"><%=itemRepo.getLabel(url.getItemId())%></a></td></tr>
-        <tr><th>Official</th><td><%=Utils.formatToHtml(url.getOfficial())%></td></tr>
+        <tr><th>Official</th><td><%=OctagonJakartaUtils.formatToHtml(url.getOfficial())%></td></tr>
         <tr><th>Created at</th><td><%=url.getCreatedAt()%></a></td></tr>
         
         

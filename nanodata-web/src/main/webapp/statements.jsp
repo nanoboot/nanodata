@@ -4,7 +4,7 @@
 <%@page import="org.nanoboot.nanodata.entity.Statement"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+<%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
 <!DOCTYPE>
 <%@ page session="false" %>
 
@@ -44,7 +44,7 @@
         >> <a href="statements.jsp" class="nav_a_current">Statements</a>
 
 
-        <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+        <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
         <% if(canUpdate) { %>
         >> <a href="create_statement.jsp">Add Statement</a>
         <% } %>
@@ -188,7 +188,7 @@
             <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
             <td><%=i.getValue()%></td>
                 <td><a href="read_item.jsp?id=<%=i.getTarget()%>"><%=itemRepo.getLabel(i.getTarget())%></a></td>
-                <td><%=Utils.formatToHtml(i.getFlags())%></td>
+                <td><%=OctagonJakartaUtils.formatToHtml(i.getFlags())%></td>
 
 
         </tr>

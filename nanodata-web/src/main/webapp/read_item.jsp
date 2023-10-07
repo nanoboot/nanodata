@@ -1,4 +1,4 @@
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+<%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.StatementRepo"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.UrlRepo"%>
@@ -65,7 +65,7 @@
         <a href="read_item.jsp?id=<%=id%>" class="nav_a_current">Read</a>
 
 
-        <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+        <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
         <% if(canUpdate) { %>
         <a href="update_item.jsp?id=<%=id%>">Update</a>
         <a href="edit_content.jsp?id=<%=id%>">Edit</a>
@@ -156,11 +156,11 @@
         <tr>
         <th>ID</th><td><%=item.getId()%> <button onclick="copyId()">Copy</button></td></tr>
         <tr><th>Label</th><td><%=item.getLabel()%></a></td></tr>
-        <tr><th>Disambiguation</th><td><%=Utils.formatToHtml(item.getDisambiguation())%></td></tr>
-        <tr><th>Description</th><td><%=Utils.formatToHtml(item.getDescription())%></td></tr>
-        <tr><th>Attributes</th><td><pre><%=Utils.formatToHtml(item.getAttributes())%></pre></td></tr>
-        <tr><th>Aliases</th><td><%=Utils.formatToHtml(item.getAliases())%></td></tr>
-        <tr><th>Entry Point Item</th><td><%=Utils.formatToHtml(item.getEntryPointItem())%></td></tr>
+        <tr><th>Disambiguation</th><td><%=OctagonJakartaUtils.formatToHtml(item.getDisambiguation())%></td></tr>
+        <tr><th>Description</th><td><%=OctagonJakartaUtils.formatToHtml(item.getDescription())%></td></tr>
+        <tr><th>Attributes</th><td><pre><%=OctagonJakartaUtils.formatToHtml(item.getAttributes())%></pre></td></tr>
+        <tr><th>Aliases</th><td><%=OctagonJakartaUtils.formatToHtml(item.getAliases())%></td></tr>
+        <tr><th>Entry Point Item</th><td><%=OctagonJakartaUtils.formatToHtml(item.getEntryPointItem())%></td></tr>
         <tr><th>Created at</th><td><%=item.getCreatedAt()%></a></td></tr>
 
 
@@ -247,7 +247,7 @@
             <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
             <td><%=i.getValue()%></td>
             <td><a href="read_item.jsp?id=<%=i.getTarget()%>"><%=itemRepo.getLabel(i.getTarget())%></a></td>
-            <td><%=Utils.formatToHtml(i.getFlags())%></td>
+            <td><%=OctagonJakartaUtils.formatToHtml(i.getFlags())%></td>
 
 
         </tr>
@@ -323,7 +323,7 @@
         <td><a href="read_item.jsp?id=<%=i.getSource()%>"><%=itemRepo.getLabel(i.getSource())%></a></td>
         <td><%=i.getValue()%></td>
         <td><a href="read_item.jsp?id=<%=i.getTarget()%>"><%=itemRepo.getLabel(i.getTarget())%></a></td>
-        <td><%=Utils.formatToHtml(i.getFlags())%></td>
+        <td><%=OctagonJakartaUtils.formatToHtml(i.getFlags())%></td>
 
 
     </tr>
@@ -401,7 +401,7 @@
         <td><a href="<%=u.getUrl()%>"><%=u.getUrl()%></a></td>
         <td><%=u.getName()%></td>
         <td><a href="read_item.jsp?id=<%=u.getItemId()%>"><%=itemRepo.getLabel(u.getItemId())%></a></td>
-        <td><%=Utils.formatToHtml(u.getOfficial())%></td>
+        <td><%=OctagonJakartaUtils.formatToHtml(u.getOfficial())%></td>
 
 
     </tr>

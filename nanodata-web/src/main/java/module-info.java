@@ -32,4 +32,5 @@ module nanodata.web {
     requires spring.web;
     requires powerframework.time;
     requires org.xerial.sqlitejdbc;
+    requires octagon.jakarta;
 }

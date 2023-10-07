@@ -1,4 +1,4 @@
-<%@page import="org.nanoboot.nanodata.web.misc.utils.Utils"%>
+<%@page import="org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.StatementRepo"%>
 <%@page import="org.nanoboot.nanodata.persistence.api.ItemRepo"%>
 <%@page import="org.nanoboot.nanodata.entity.Statement"%>
@@ -62,7 +62,7 @@
         <a href="read_statement.jsp?id=<%=id%>" class="nav_a_current">Read</a>
         
         
-                    <% boolean canUpdate = org.nanoboot.nanodata.web.misc.utils.Utils.canUpdate(request); %>
+                    <% boolean canUpdate = org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils.canUpdate(request); %>
 <% if(canUpdate) { %>
         <a href="update_statement.jsp?id=<%=id%>">Update</a>
         <a href="delete_statement.jsp?id=<%=id%>">Delete</a>
@@ -118,9 +118,9 @@ window.location.href = 'update_statement.jsp?id=<%=id%>'
         <tr>
             <th>ID</th><td><%=statement.getId()%></td></tr>
         <tr><th>Source</th><td><a href="read_item.jsp?id=<%=statement.getSource()%>"><%=itemRepo.getLabel(statement.getSource())%></a></td></tr>
-        <tr><th>Value</th><td><%=Utils.formatToHtml(statement.getValue())%></td></tr>
+        <tr><th>Value</th><td><%=OctagonJakartaUtils.formatToHtml(statement.getValue())%></td></tr>
         <tr><th>Target</th><td><a href="read_item.jsp?id=<%=statement.getTarget()%>"><%=itemRepo.getLabel(statement.getTarget())%></a></td></tr>
-        <tr><th>Flags</th><td><%=Utils.formatToHtml(statement.getFlags())%></td></tr>
+        <tr><th>Flags</th><td><%=OctagonJakartaUtils.formatToHtml(statement.getFlags())%></td></tr>
         <tr><th>Created at</th><td><%=statement.getCreatedAt()%></a></td></tr>
         
         

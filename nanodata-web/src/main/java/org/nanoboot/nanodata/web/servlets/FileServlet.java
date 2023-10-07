@@ -28,6 +28,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.nanoboot.octagon.jakarta.utils.OctagonJakartaUtils;
 
 @WebServlet(
         name = "FileServlet",
@@ -41,7 +42,7 @@ public class FileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        if (org.nanoboot.nanodata.web.misc.utils.Utils.cannotUpdate(req)) {
+        if (OctagonJakartaUtils.cannotUpdate(req)) {
             resp.getOutputStream().println("Access forbidden");
             return;
         }
